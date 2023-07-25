@@ -7,8 +7,6 @@ resource "azurerm_resource_group" "rg" {
   name     = random_pet.rg_name.id
 }
 
-data "azurerm_client_config" "current" {}
-
 data "http" "ip" {
   url = "https://ifconfig.me"
 }

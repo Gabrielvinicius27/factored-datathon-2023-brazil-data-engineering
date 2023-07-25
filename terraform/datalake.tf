@@ -1,9 +1,7 @@
-locals {
-  current_user_id = coalesce(var.msi_id, data.azurerm_client_config.current.object_id)
-}
-
 resource "random_pet" "storage_account_gen2_name" {
   prefix = var.storage_account_gen2_name_prefix
+  length = 1
+  separator = ""
 }
 
 resource "azurerm_storage_account" "lake" {
@@ -19,7 +17,7 @@ resource "azurerm_storage_account" "lake" {
 resource "azurerm_role_assignment" "sbdc_current_user" {
   scope                = azurerm_storage_account.lake.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = local.current_user_id
+  principal_id         = var.aad_login.object_id
 }
 
 resource "azurerm_role_assignment" "sbdc_syn_ws" {
