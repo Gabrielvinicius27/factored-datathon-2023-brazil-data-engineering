@@ -22,6 +22,7 @@ resource "azurerm_synapse_workspace" "default" {
   identity {
     type = "SystemAssigned"
   }
+
 }
 
 resource "azurerm_synapse_firewall_rule" "allow_my_ip" {

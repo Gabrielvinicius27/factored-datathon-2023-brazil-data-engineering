@@ -9,17 +9,17 @@ variable "resource_group_name_prefix" {
 }
 
 variable "storage_account_gen2_name_prefix" {
-  default     = "st-datalake"
+  default     = "stdatalake"
   description = "Prefix of the storage account name that's combined with a random ID so name is unique in your Azure subscription."
 }
 
-variable "name" {
+variable "synapse_name" {
   type        = string
   description = "Name of the deployment"
   default     = null
 }
 
-variable "environment" {
+variable "synapse_environment" {
   type        = string
   description = "Name of the environment"
   default     = "dev"
