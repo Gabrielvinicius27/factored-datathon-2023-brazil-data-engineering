@@ -11,6 +11,12 @@ terraform {
       version = "~>3.0"
     }
   }
+  backend "azurerm" {
+      resource_group_name  = "rg-factored-datathon-mint-magpie"
+      storage_account_name = "tfstatem12o6"
+      container_name       = "tfstate"
+      key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
