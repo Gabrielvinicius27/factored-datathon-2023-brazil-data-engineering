@@ -10,7 +10,7 @@ resource "azurerm_storage_account" "tfstate" {
   location                 = var.resource_group_location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  allow_blob_public_access = false
+  allow_nested_items_to_be_public = false
 
   tags = {
     environment = "staging"
