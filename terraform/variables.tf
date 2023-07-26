@@ -65,8 +65,9 @@ variable "enable_syn_sqlpool" {
   default     = false
 }
 
-variable "msi_id" {
+variable "sas_uri" {
   type    = string
-  description = "If you're running this example by authentication with identity, please set identity object id here."
+  description = "Value of the Key Vault Secret SAS URI"
   default = null
 }
+
