@@ -1,0 +1,159 @@
+{
+    "name": "PIPE_AMAZON_REVIEWS",
+    "properties": {
+        "activities": [
+            {
+                "name": "RAW Amazon Reviews",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "JsonSource",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageReadSettings",
+                            "recursive": true,
+                            "wildcardFolderPath": "amazon_reviews",
+                            "wildcardFileName": "*.json.gz",
+                            "enablePartitionDiscovery": false
+                        },
+                        "formatSettings": {
+                            "type": "JsonReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "ParquetSink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings",
+                            "copyBehavior": "PreserveHierarchy"
+                        },
+                        "formatSettings": {
+                            "type": "ParquetWriteSettings"
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "path": "$['asin']"
+                                },
+                                "sink": {
+                                    "name": "asin",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['overall']"
+                                },
+                                "sink": {
+                                    "name": "overall",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['reviewText']"
+                                },
+                                "sink": {
+                                    "name": "review_text",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['reviewerID']"
+                                },
+                                "sink": {
+                                    "name": "reviewer_id",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['reviewerName']"
+                                },
+                                "sink": {
+                                    "name": "reviewer_name",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['summary']"
+                                },
+                                "sink": {
+                                    "name": "summary",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['unixReviewTime']"
+                                },
+                                "sink": {
+                                    "name": "unix_review_time",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['verified']"
+                                },
+                                "sink": {
+                                    "name": "verified",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['style']"
+                                },
+                                "sink": {
+                                    "name": "style",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['vote']"
+                                },
+                                "sink": {
+                                    "name": "vote",
+                                    "type": "String"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "blob_safactoreddatathon_json",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "datalake_raw_parquet",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "folder_name": "raw_amazon_reviews"
+                        }
+                    }
+                ]
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2023-07-26T11:09:19Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
