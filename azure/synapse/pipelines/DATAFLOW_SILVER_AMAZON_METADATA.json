@@ -1,0 +1,101 @@
+{
+    "name": "DATAFLOW_SILVER_AMAZON_METADATA",
+    "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "ds_raw_amazon_metadata",
+                        "type": "DatasetReference"
+                    },
+                    "name": "rawAmazonMetadata"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "ds_silver_amazon_metadata",
+                        "type": "DatasetReference"
+                    },
+                    "name": "writeSilverAmazonMetadata"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "DistinctRows"
+                },
+                {
+                    "name": "transformArrays"
+                },
+                {
+                    "name": "selectColumns"
+                }
+            ],
+            "scriptLines": [
+                "source(output(",
+                "          also_buy as string,",
+                "          also_view as string,",
+                "          asin as string,",
+                "          brand as string,",
+                "          category as string,",
+                "          date as string,",
+                "          description as string,",
+                "          details_asin as string,",
+                "          details_shipping_weight as string,",
+                "          feature as string,",
+                "          fit as string,",
+                "          image as string,",
+                "          main_cat as string,",
+                "          price as string,",
+                "          rank as string,",
+                "          similar_item as string,",
+                "          tech1 as string,",
+                "          tech2 as string,",
+                "          title as string",
+                "     ),",
+                "     allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     ignoreNoFilesFound: false,",
+                "     format: 'parquet',",
+                "     wildcardPaths:['synapse/workspaces/syn-synfactoreddatathon01-dev/raw/raw_amazon_metadata/*']) ~> rawAmazonMetadata",
+                "rawAmazonMetadata aggregate(groupBy(mycols = sha2(256,columns())),",
+                "     each(match(true()), $$ = first($$))) ~> DistinctRows",
+                "DistinctRows derive(also_buy = split(replace(replace(also_buy, '[', ''), ']', ''), ','),",
+                "          also_view = split(replace(replace(also_view, '[', ''), ']', ''), ','),",
+                "          category = split(replace(replace(category, '[', ''), ']', ''), ','),",
+                "          image = split(replace(replace(image, '[', ''), ']', ''), ','),",
+                "          description = split(replace(replace(description, '[', ''), ']', ''), ','),",
+                "          feature = split(replace(replace(feature, '[', ''), ']', ''), ',')) ~> transformArrays",
+                "transformArrays select(mapColumn(",
+                "          also_buy,",
+                "          also_view,",
+                "          asin,",
+                "          brand,",
+                "          category,",
+                "          description,",
+                "          details_asin,",
+                "          details_shipping_weight,",
+                "          feature,",
+                "          image,",
+                "          price,",
+                "          rank,",
+                "          tech1,",
+                "          tech2,",
+                "          title",
+                "     ),",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true) ~> selectColumns",
+                "selectColumns sink(allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     format: 'parquet',",
+                "     umask: 0022,",
+                "     preCommands: [],",
+                "     postCommands: [],",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true,",
+                "     partitionBy('roundRobin', 200)) ~> writeSilverAmazonMetadata"
+            ]
+        }
+    }
+}
