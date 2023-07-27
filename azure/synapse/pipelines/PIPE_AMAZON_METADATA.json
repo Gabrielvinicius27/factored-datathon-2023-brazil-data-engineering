@@ -1,0 +1,242 @@
+{
+    "name": "PIPE_AMAZON_METADATA",
+    "properties": {
+        "activities": [
+            {
+                "name": "RAW Amazon Metadata",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "JsonSource",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageReadSettings",
+                            "recursive": true,
+                            "wildcardFolderPath": "amazon_metadata",
+                            "wildcardFileName": "*.json.gz",
+                            "enablePartitionDiscovery": false
+                        },
+                        "formatSettings": {
+                            "type": "JsonReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "ParquetSink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings",
+                            "copyBehavior": "PreserveHierarchy"
+                        },
+                        "formatSettings": {
+                            "type": "ParquetWriteSettings"
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "path": "$['also_buy']"
+                                },
+                                "sink": {
+                                    "name": "also_buy",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['also_view']"
+                                },
+                                "sink": {
+                                    "name": "also_view",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['asin']"
+                                },
+                                "sink": {
+                                    "name": "asin",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['brand']"
+                                },
+                                "sink": {
+                                    "name": "brand",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['category']"
+                                },
+                                "sink": {
+                                    "name": "category",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['date']"
+                                },
+                                "sink": {
+                                    "name": "date",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['description']"
+                                },
+                                "sink": {
+                                    "name": "description",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['details']['ASIN: ']"
+                                },
+                                "sink": {
+                                    "name": "details_asin",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['details']['Shipping Weight:']"
+                                },
+                                "sink": {
+                                    "name": "details_shipping_weight",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['feature']"
+                                },
+                                "sink": {
+                                    "name": "feature",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['fit']"
+                                },
+                                "sink": {
+                                    "name": "fit",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['image']"
+                                },
+                                "sink": {
+                                    "name": "image",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['main_cat']"
+                                },
+                                "sink": {
+                                    "name": "main_cat",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['price']"
+                                },
+                                "sink": {
+                                    "name": "price",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['rank']"
+                                },
+                                "sink": {
+                                    "name": "rank",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['similar_item']"
+                                },
+                                "sink": {
+                                    "name": "similar_item",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['tech1']"
+                                },
+                                "sink": {
+                                    "name": "tech1",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['tech2']"
+                                },
+                                "sink": {
+                                    "name": "tech2",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "path": "$['title']"
+                                },
+                                "sink": {
+                                    "name": "title",
+                                    "type": "String"
+                                }
+                            }
+                        ],
+                        "collectionReference": "",
+                        "mapComplexValuesToString": true
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "blob_safactoreddatathon_json",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "datalake_raw_parquet",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "folder_name": "raw_amazon_metadata"
+                        }
+                    }
+                ]
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2023-07-26T15:46:39Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
