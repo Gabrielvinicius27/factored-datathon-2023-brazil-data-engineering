@@ -14,13 +14,15 @@ resource "azurerm_synapse_sql_pool" "syn_pool_sql" {
 resource "azurerm_synapse_spark_pool" "syn_pool_spark" {
   count = var.enable_syn_sparkpool ? 1 : 0
 
-  name                 = "synsp01"
+  name                 = "synsp03"
   synapse_workspace_id = azurerm_synapse_workspace.default.id
   node_size_family     = "MemoryOptimized"
   node_size            = "Small"
+  spark_version        = "3.3"
+  
 
   auto_scale {
-    max_node_count = 50
+    max_node_count = 3
     min_node_count = 3
   }
 
