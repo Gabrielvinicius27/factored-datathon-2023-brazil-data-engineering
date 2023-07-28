@@ -66,8 +66,14 @@ variable "enable_syn_sqlpool" {
 }
 
 variable "sas_uri" {
-  type    = string
+  type        = string
   description = "Value of the Key Vault Secret SAS URI"
-  default = null
+  default     = null
+}
+
+variable "event_hub_sas_policy_key" {
+  type        = string
+  description = "Event Hub Shared Access Policy Key"
+  default     = null
 }
 
