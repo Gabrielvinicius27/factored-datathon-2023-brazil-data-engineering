@@ -1,0 +1,102 @@
+{
+    "name": "DATAFLOW_SILVER_AMAZON_REVIEWS",
+    "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "ds_raw_amazon_reviews",
+                        "type": "DatasetReference"
+                    },
+                    "name": "rawAmazonReviews"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "ds_silver_amazon_reviews",
+                        "type": "DatasetReference"
+                    },
+                    "name": "writeSilverAmazonReview"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "DistinctRows"
+                },
+                {
+                    "name": "selectColumns"
+                },
+                {
+                    "name": "parseStyle"
+                },
+                {
+                    "name": "createTimestampColumn"
+                },
+                {
+                    "name": "cast1"
+                }
+            ],
+            "scriptLines": [
+                "source(output(",
+                "          asin as string,",
+                "          overall as string,",
+                "          review_text as string,",
+                "          reviewer_id as string,",
+                "          reviewer_name as string,",
+                "          summary as string,",
+                "          unix_review_time as string,",
+                "          verified as string,",
+                "          style as string,",
+                "          vote as string",
+                "     ),",
+                "     allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     ignoreNoFilesFound: false,",
+                "     format: 'parquet',",
+                "     wildcardPaths:['synapse/workspaces/syn-synfactoreddatathon01-dev/raw/raw_amazon_reviews/*'],",
+                "     partitionBy('roundRobin', 2000)) ~> rawAmazonReviews",
+                "rawAmazonReviews aggregate(groupBy(mycols = sha2(256,columns())),",
+                "     each(match(true()), $$ = first($$))) ~> DistinctRows",
+                "cast1 select(mapColumn(",
+                "          asin,",
+                "          review_timestamp,",
+                "          overall,",
+                "          review_text,",
+                "          reviewer_id,",
+                "          reviewer_name,",
+                "          summary,",
+                "          verified,",
+                "          vote,",
+                "          style_format = style_1.Format,",
+                "          style_color = style_1.Color,",
+                "          style_size = style_1.Size",
+                "     ),",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true) ~> selectColumns",
+                "DistinctRows parse(style_1 = replace(replace(replace(style, \"Format:\", \"Format\"), \"Size:\", \"Size\"), \"Color:\", \"Color\") ? (Format as string,",
+                "          Color as string,",
+                "          Size as string),",
+                "     format: 'json',",
+                "     documentForm: 'singleDocument') ~> parseStyle",
+                "parseStyle derive(review_timestamp = toTimestamp(toInteger(unix_review_time)*1000l)) ~> createTimestampColumn",
+                "createTimestampColumn cast(output(",
+                "          overall as integer '000',",
+                "          verified as boolean,",
+                "          vote as integer '000'",
+                "     ),",
+                "     errors: false) ~> cast1",
+                "selectColumns sink(allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     format: 'parquet',",
+                "     umask: 0022,",
+                "     preCommands: [],",
+                "     postCommands: [],",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true,",
+                "     partitionBy('roundRobin', 200)) ~> writeSilverAmazonReview"
+            ]
+        }
+    }
+}
