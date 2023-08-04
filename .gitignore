@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
-
+azure/synapse/notebooks/.env
+neo4j/neo4j/data/*
+neo4j/neo4j/import/*
+neo4j/neo4j/logs/*
 # .tfstate files
 *.tfstate
 *.tfstate.*
@@ -31,4 +34,4 @@ override.tf.json
 
 # Ignore CLI configuration files
 .terraformrc
-terraform.rc
+terraform.rcp
