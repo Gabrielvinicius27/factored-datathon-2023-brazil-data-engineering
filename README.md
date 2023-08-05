@@ -13,6 +13,7 @@ I choosed to use Azure for this datathon, because I could use Azure Synapse and 
 After ingesting data into data lake it`s time to process our review text, I have listed the product categories, and selected main_category automotive to work with, because I like this subject, I have decided to do a topic modeling using LDA (Latent Dirichlet Allocation), this name isn't easy :D
 
 I started using spark nlp lib to do this process, i did the following steps:
+
 ![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Text%20Processing.png)
 
 This code is stored in azure/synapse/notebooks/EDA_1_1..., in tokenization I splitted the review text in a list after removing ponctuation and numbers, in normalization all words were transformed to lower case and plurals removed, removed stop words and then lemmatization, in this step common words were transformed, for example worked became work.
@@ -21,8 +22,28 @@ This list of words were transformed to a vector using count vectorizer and IDF, 
 In the first train I have set up 4 topics, but it wasn't good, so I trained with 15 topics, and results were better.
 
 I plotted this visual, we have some specific topics, for example, topic 9 is related to car parts for lighining, we have some frequent terms like bulb, light, yellow, bright and so on.
+
 ![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/LDA_visual.png)
 
 A future implementation could be analyzing this specific topics to understand more about possible concentrated problems, for example topic 5 is related to shipping, this way we can know more details about the products delivery.
+
+## 4. Graph Database
+Graphs are good to understand about relationships, I have uploaded the streaming data to Neo4j database, and started to analyze the relationships, using graph databases is possible to create recommendation systems
+
+Graph Example:
+
+![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Neo4J_graph_example.png)
+
+let's suppose that a customer A have bought product 1, customer B also bought this product, and both rated with 4 stars or more, so both customer have similiar preferences, we can recommend to customer A a product that customer B bought and liked.
+
+## 5. Power BI
+Using Power BI is possible to create some interesting dashboards to help stakeholders take decisions, I created a dashboard where stakeholders can fill their brand name and see overall avarage, quantity of itens by category and most used words in reviews for that selection.
+
+![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Dashboard.png)
+
+## 6. Final Notebook
+
+https://colab.research.google.com/gist/Gabrielvinicius27/3dd7e8e3b01e06329c88f687991a877b/topic-modelling-and-graph-analysis.ipynb#scrollTo=gyi50pyLqgis
+
 
 
