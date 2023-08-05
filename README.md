@@ -14,7 +14,7 @@ After ingesting data into data lake it`s time to process our review text, I have
 
 I started using spark nlp lib to do this process, i did the following steps:
 
-![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Text%20Processing.png)
+![Text Processing](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Text%20Processing.png)
 
 This code is stored in azure/synapse/notebooks/EDA_1_1..., in tokenization I splitted the review text in a list after removing ponctuation and numbers, in normalization all words were transformed to lower case and plurals removed, removed stop words and then lemmatization, in this step common words were transformed, for example worked became work.
 
@@ -23,7 +23,7 @@ In the first train I have set up 4 topics, but it wasn't good, so I trained with
 
 I plotted this visual, we have some specific topics, for example, topic 9 is related to car parts for lighining, we have some frequent terms like bulb, light, yellow, bright and so on.
 
-![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/LDA_visual.png)
+![LDA](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/LDA_visual.png)
 
 A future implementation could be analyzing this specific topics to understand more about possible concentrated problems, for example topic 5 is related to shipping, this way we can know more details about the products delivery.
 
@@ -32,18 +32,24 @@ Graphs are good to understand about relationships, I have uploaded the streaming
 
 Graph Example:
 
-![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Neo4J_graph_example.png)
+![Graph](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Neo4J_graph_example.png)
 
 let's suppose that a customer A have bought product 1, customer B also bought this product, and both rated with 4 stars or more, so both customer have similiar preferences, we can recommend to customer A a product that customer B bought and liked.
+
+Using this logic I built a web app using streamlit, where you can add a reviewer_id and get the recommended products
+* link: https://factored-datathon-2023-brazil-data-engineering-uoa5p86azufxzm3.streamlit.app/
+  
+![Web App](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/WebApp.png)
 
 ## 5. Power BI
 Using Power BI is possible to create some interesting dashboards to help stakeholders take decisions, I created a dashboard where stakeholders can fill their brand name and see overall avarage, quantity of itens by category and most used words in reviews for that selection.
 
-![Factored Datathon Architecture](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Dashboard.png)
+![Power BI](https://github.com/Gabrielvinicius27/factored-datathon-2023-brazil-data-engineering/blob/main/images/Dashboard.png)
 
-## 6. Final Notebook
+## 6. Final Notebook and presentation
 
-https://colab.research.google.com/gist/Gabrielvinicius27/3dd7e8e3b01e06329c88f687991a877b/topic-modelling-and-graph-analysis.ipynb#scrollTo=gyi50pyLqgis
+* Presentation: https://tome.app/factored-datathon/fundraising-pitch-copy-clkx28drb0078pv5pytulpnvd
+* Notebook: https://colab.research.google.com/gist/Gabrielvinicius27/3dd7e8e3b01e06329c88f687991a877b/topic-modelling-and-graph-analysis.ipynb#scrollTo=gyi50pyLqgis
 
 
 
