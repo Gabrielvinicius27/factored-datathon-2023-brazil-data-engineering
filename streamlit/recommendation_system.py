@@ -11,7 +11,7 @@ class RecommendationSystem:
 
     def __init__(self, uri, user, password):
         self.driver = GraphDatabase.driver('neo4j+s://5e7957dd.databases.neo4j.io', 
-        auth=('neo4j', 'cUr7whsz9Nf9iSDv2ZNRSl01o91xytgr7T5MePKDyhA'))
+        auth=('neo4j', st.secrets["neo4j_password"]))
 
     def close(self):
         self.driver.close()
