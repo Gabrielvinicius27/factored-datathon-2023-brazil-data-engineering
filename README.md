@@ -2,7 +2,7 @@
 Brazil Data Engineering
 
 ## 1. Context
-In this datathon Factored created a challange to ingest e-commerce data from a data lake and an event hub, this data consists in product metadata and customer reviews, work with text isn't a simple task, with big data is worst, so this challange aggregates a lot in my data engineer skills, and much more in my data analytics and data science skills, I work as a data engineer since 2019, I really love this part, but data analysis wasn't my strong point, but this datathon helped me to evolve.
+In this datathon Factored created a challenge to ingest e-commerce data from a data lake and an event hub, this data consists in product metadata and customer reviews, work with text isn't a simple task, with big data is worst, so this challange aggregates a lot in my data engineer skills, and much more in my data analytics and data science skills, I work as a data engineer since 2019, I really love this part, but data analysis wasn't my strong point, but this datathon helped me to evolve.
 
 ## 2. Architecture
 I choosed to use Azure for this datathon, because I could use Azure Synapse and Stream Analytics, AWS and GCP offers tools that are similiar to these ones, but I already worked with this, this way I could spend less time in Data Engineering and more in Data Analysis, but I challanged myself using Terraform, I have provisioned Azure Synapse Workspace, Azure Spark Pool, Azure Stream Analytics Job and Azure Storage Account using terraform, the code is stored in terraform folder.
